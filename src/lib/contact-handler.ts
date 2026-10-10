@@ -53,17 +53,27 @@ export function createContactHandler(deps: Dependencies) {
     });
   }
   return async function handle(request: Request) {
-    const config = deps.settings();
-    let expectedOrigin: string;
-    try {
-      expectedOrigin = new URL(config.siteUrl || request.url).origin;
-    } catch {
-      return reply(503, {
-        error:
-          "The form is temporarily unavailable. Please email contact@ayyan.tech directly.",
-      });
+    const raw = deps.settings();
+    const config = Object.fromEntries(
+      Object.entries(raw).map(([key, value]) => [key, value?.trim()]),
+    ) as Settings;
+    // Same-origin submissions work on the canonical domain, aliases and previews.
+    // SITE_URL is optional here; an unrelated Origin is never authorized.
+    const allowedOrigins = new Set([new URL(request.url).origin]);
+    if (config.siteUrl) {
+      try {
+        const site = new URL(
+          config.siteUrl.includes("://")
+            ? config.siteUrl
+            : `https://${config.siteUrl}`,
+        );
+        if (["https:", "http:"].includes(site.protocol))
+          allowedOrigins.add(site.origin);
+      } catch {
+        console.error("Contact form: invalid SITE_URL; using request origin.");
+      }
     }
-    if (request.headers.get("origin") !== expectedOrigin)
+    if (!allowedOrigins.has(request.headers.get("origin") || ""))
       return reply(403, {
         error: "Please send your enquiry from this website.",
       });
@@ -143,6 +153,7 @@ export function createContactHandler(deps: Dependencies) {
       !emailPattern.test(config.sender) ||
       !emailPattern.test(config.recipient)
     ) {
+      console.error("Contact form: missing or invalid Brevo configuration.");
       return reply(503, {
         error:
           "The form is temporarily unavailable. Please email contact@ayyan.tech directly.",
@@ -166,11 +177,15 @@ export function createContactHandler(deps: Dependencies) {
         }),
         signal: AbortSignal.timeout(12_000),
       });
-      if (!sent.ok)
+      if (!sent.ok) {
+        console.error("Contact form: Brevo rejected request", {
+          status: sent.status,
+        });
         return reply(502, {
           error:
             "Your enquiry couldn’t be sent. Please email contact@ayyan.tech directly.",
         });
+      }
       const receipt = await sent.json();
       if (typeof receipt.messageId !== "string" || !receipt.messageId)
         return reply(502, {

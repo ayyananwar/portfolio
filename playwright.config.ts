@@ -3,14 +3,14 @@ export default defineConfig({
   testDir: "./tests/browser",
   fullyParallel: false,
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: process.env.TEST_BASE_URL || "http://localhost:3000",
     browserName: "chromium",
     channel: process.env.BROWSER_CHANNEL,
     headless: true,
   },
   webServer: {
     command: "npm run start",
-    url: "http://localhost:3000",
+    url: process.env.TEST_BASE_URL || "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
   },

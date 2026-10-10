@@ -1,62 +1,69 @@
 "use client";
 import { useState } from "react";
-import {
-  Check,
-  RotateCcw,
-  ArrowDown,
-  Fingerprint,
-  GitBranch,
-} from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { Check, RotateCcw, ArrowDown, Fingerprint } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function BuildVisual() {
+  const reduced = useReducedMotion();
+  const layers = [
+    { label: "01 / INTERFACE", title: "Web.", icon: "< / >", className: "web" },
+    {
+      label: "02 / SYSTEM",
+      title: "Backend.",
+      icon: "{ }",
+      className: "backend",
+    },
+    {
+      label: "03 / CONNECTION",
+      title: "Automation.",
+      icon: "↗",
+      className: "automation",
+    },
+  ];
   return (
     <div
       className="build-visual"
-      aria-label="Illustration connecting web interfaces, backend systems, and workflows"
+      aria-label="Web interfaces, backend systems, and automation connected"
     >
-      <div className="visual-topline mono">
-        <span>SOFTWARE, CONNECTED</span>
-        <span>↗</span>
-      </div>
-      <div className="build-orbit" aria-hidden="true">
-        <div className="orbit-center">
-          <span>
-            a<span className="orbit-dot">.</span>
-          </span>
-        </div>
-        <div className="orbit-ring ring-one" />
-        <div className="orbit-ring ring-two" />
-      </div>
-      <div className="build-layer layer-web">
-        <span className="mono">01 / INTERFACE</span>
-        <strong>Web.</strong>
-        <span className="layer-code">&lt; / &gt;</span>
-      </div>
-      <div className="build-layer layer-api">
-        <span className="mono">02 / SYSTEM</span>
-        <strong>Backend.</strong>
-        <GitBranch aria-hidden="true" size={28} />
-      </div>
-      <div className="build-layer layer-flow">
-        <span className="mono">03 / CONNECTION</span>
-        <strong>Automation.</strong>
-        <div className="flow-dots" aria-hidden="true">
-          <i />
-          <b />
-          <i />
-          <b />
-          <i />
-        </div>
-      </div>
-      <div className="visual-bottomline mono">
-        <span>INTERFACES → SYSTEMS → WORKFLOWS</span>
-        <span>↓</span>
+      <div className="build-caption mono">INTERFACES → SYSTEMS → WORKFLOWS</div>
+      <div className="build-stack">
+        {layers.map((layer, index) => (
+          <motion.div
+            key={layer.title}
+            className={"build-card build-card-" + layer.className}
+            initial={false}
+            whileInView={
+              reduced
+                ? undefined
+                : { y: [24, 0], rotate: [0, index === 1 ? 2 : -2] }
+            }
+            viewport={{ once: true, amount: 0.4 }}
+            whileHover={reduced ? undefined : { y: -5, rotate: 0 }}
+            transition={{
+              duration: 0.7,
+              delay: index * 0.12,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <span className="mono">{layer.label}</span>
+            <div className="build-card-content">
+              <strong>{layer.title}</strong>
+              <span className="build-symbol" aria-hidden="true">
+                {layer.icon}
+              </span>
+            </div>
+            <div className="build-track" aria-hidden="true">
+              <i />
+              <i />
+              <i />
+            </div>
+          </motion.div>
+        ))}
       </div>
     </div>
   );
 }
-
 export function PromiseVisual() {
   const [creator, setCreator] = useState(false);
   const [recipient, setRecipient] = useState(false);

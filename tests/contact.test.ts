@@ -15,6 +15,27 @@ const settings = {
   recipient: "contact@ayyan.tech",
   siteUrl: "https://portfolio.example",
 };
+test("accepts same-origin aliases and previews with a bare canonical domain", async () => {
+  const handler = createContactHandler({
+    settings: () => ({ ...settings, siteUrl: " ayyan.tech " }),
+    fetch: async () => Response.json({ messageId: "test" }),
+  });
+  for (const origin of [
+    "https://www.ayyan.tech",
+    "https://preview.vercel.app",
+  ]) {
+    const submission = new Request(`${origin}/api/contact`, {
+      method: "POST",
+      headers: { origin, "content-type": "application/json" },
+      body: JSON.stringify(valid),
+    });
+    assert.equal((await handler(submission)).status, 200);
+  }
+  assert.equal(
+    (await handler(request(valid, "https://unrelated.example"))).status,
+    403,
+  );
+});
 function request(
   body: unknown = valid,
   origin = "https://portfolio.example",

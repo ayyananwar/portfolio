@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { profile, projects, services } from "@/lib/content";
-import { Reveal, Parallax } from "@/components/motion";
+import { Reveal } from "@/components/motion";
 import {
   BuildVisual,
   PromiseVisual,
@@ -116,19 +116,8 @@ function Navigation() {
   );
 }
 
-function SectionLabel({
-  number,
-  children,
-}: {
-  number: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="section-label mono">
-      <span>{number}</span>
-      {children}
-    </div>
-  );
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return <div className="section-label mono">{children}</div>;
 }
 
 export function Portfolio() {
@@ -140,7 +129,7 @@ export function Portfolio() {
       <div id="top" />
       <Navigation />
       <main id="main">
-        {/* Hero structure adapted from Tailark Mist Hero One; custom typography and diagram. */}
+        {/* Hero structure adapted from Tailark Mist Hero One; custom editorial typography. */}
         <section className="hero section-shell" aria-labelledby="hero-heading">
           <div className="hero-main">
             <Reveal className="hero-copy">
@@ -148,20 +137,7 @@ export function Portfolio() {
                 <span className="small-line" />
                 AYYAN ANWAR / SOFTWARE DEVELOPMENT
               </div>
-            <h1 id="hero-heading" aria-label={profile.introduction}>
-                I build web
-                <br />
-                applications,
-                <br />
-                backend systems,
-                <br />
-                and{" "}
-                <span className="accent-word">
-                  workflow
-                  <br className="desktop-break" /> automations
-                  <span className="end-dot">.</span>
-                </span>
-              </h1>
+              <h1 id="hero-heading">{profile.introduction}</h1>
               <div className="hero-actions">
                 <Button asChild className="button-primary">
                   <a href="#work">
@@ -175,16 +151,7 @@ export function Portfolio() {
                 </a>
               </div>
             </Reveal>
-            <Parallax className="hero-art">
-              <BuildVisual />
-            </Parallax>
-          </div>
-          <div className="hero-foot">
-            <span className="mono">WEB / BACKEND / AUTOMATION</span>
-            <a href="#work" className="scroll-prompt">
-              A closer look at the work
-              <ArrowDown size={15} />
-            </a>
+            <BuildVisual />
           </div>
         </section>
 
@@ -194,7 +161,7 @@ export function Portfolio() {
           aria-labelledby="work-heading"
         >
           <Reveal className="section-heading">
-            <SectionLabel number="01">SELECTED WORK</SectionLabel>
+            <SectionLabel>SELECTED WORK</SectionLabel>
             <div>
               <h2 id="work-heading">
                 Two problems.
@@ -218,9 +185,7 @@ export function Portfolio() {
               </Reveal>
               <Reveal className="project-copy" delay={0.08}>
                 <div className="project-meta mono">
-                  <span>
-                    {project.number} / {project.name}
-                  </span>
+                  <span>{project.name}</span>
                   <span>{project.category}</span>
                 </div>
                 <h3 id={`${project.id}-heading`}>{project.headline}</h3>
@@ -278,7 +243,7 @@ export function Portfolio() {
         >
           <div className="section-shell">
             <Reveal className="section-heading">
-              <SectionLabel number="02">HOW I CAN HELP</SectionLabel>
+              <SectionLabel>HOW I CAN HELP</SectionLabel>
               <div>
                 <h2 id="services-heading">
                   From an interface
@@ -293,11 +258,10 @@ export function Portfolio() {
               </div>
             </Reveal>
             <div className="service-list">
-              {services.map((service, index) => {
+              {services.map((service) => {
                 const Icon = serviceIcons[service.icon];
                 return (
                   <Reveal key={service.name} className="service-row">
-                    <span className="service-number mono">0{index + 1}</span>
                     <div className="service-icon">
                       <Icon size={25} strokeWidth={1.4} aria-hidden="true" />
                     </div>
@@ -323,7 +287,7 @@ export function Portfolio() {
           aria-labelledby="about-heading"
         >
           <Reveal>
-            <SectionLabel number="03">A LITTLE BACKGROUND</SectionLabel>
+            <SectionLabel>A LITTLE BACKGROUND</SectionLabel>
           </Reveal>
           <div className="about-grid">
             <Reveal>
@@ -373,7 +337,7 @@ export function Portfolio() {
         >
           <div className="section-shell">
             <Reveal>
-              <SectionLabel number="04">LET’S TALK</SectionLabel>
+              <SectionLabel>LET’S TALK</SectionLabel>
             </Reveal>
             <div className="contact-grid">
               <Reveal className="contact-copy">
