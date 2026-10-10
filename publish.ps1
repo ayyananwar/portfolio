@@ -5,10 +5,13 @@ Set-Location -LiteralPath $PSScriptRoot
 $account = & gh api user --jq .login
 if ($LASTEXITCODE -ne 0 -or $account -ne 'ayyananwar') { throw 'Sign in to GitHub CLI as ayyananwar first.' }
 if (-not (Test-Path -LiteralPath '.git')) { throw 'The prepared Git repository is missing.' }
-$remote = & git remote get-url origin 2>$null
-if ($LASTEXITCODE -eq 0 -and $remote -ne 'https://github.com/ayyananwar/portfolio.git') { throw 'Unexpected origin. Check it before publishing.' }
-$existing = & gh repo view ayyananwar/portfolio --json url --jq .url 2>$null
-if ($LASTEXITCODE -ne 0) {
+$remote = $null
+$remoteNames = & git remote
+if ($remoteNames -contains 'origin') { $remote = & git remote get-url origin }
+if ($remote -and $remote -ne 'https://github.com/ayyananwar/portfolio.git') { throw 'Unexpected origin. Check it before publishing.' }
+$existing = & gh repo list ayyananwar --limit 1000 --json name --jq '.[] | select(.name == "portfolio") | .name'
+if ($LASTEXITCODE -ne 0) { throw 'Could not inspect your repositories.' }
+if (-not $existing) {
   & gh repo create ayyananwar/portfolio --public --description 'Ayyan Anwar — web applications, backend systems, and workflow automation.'
   if ($LASTEXITCODE -ne 0) { throw 'Could not create repository.' }
 }
