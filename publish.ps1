@@ -9,8 +9,10 @@ $remote = $null
 $remoteNames = & git remote
 if ($remoteNames -contains 'origin') { $remote = & git remote get-url origin }
 if ($remote -and $remote -ne 'https://github.com/ayyananwar/portfolio.git') { throw 'Unexpected origin. Check it before publishing.' }
-$existing = & gh repo list ayyananwar --limit 1000 --json name --jq '.[] | select(.name == "portfolio") | .name'
+$repositoryJson = & gh repo list ayyananwar --limit 1000 --json name
 if ($LASTEXITCODE -ne 0) { throw 'Could not inspect your repositories.' }
+$repositories = ConvertFrom-Json -InputObject ($repositoryJson -join [Environment]::NewLine)
+$existing = $repositories | Where-Object { $_.name -eq 'portfolio' }
 if (-not $existing) {
   & gh repo create ayyananwar/portfolio --public --description 'Ayyan Anwar — web applications, backend systems, and workflow automation.'
   if ($LASTEXITCODE -ne 0) { throw 'Could not create repository.' }
