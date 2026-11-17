@@ -13,3 +13,5 @@ The supplied portfolio image controls the visual direction. Reuse approved perso
 - Brevo: existing server-side API credentials and handler; no public API keys. Success means provider acceptance, not confirmed inbox delivery.
 
 User reference overrides generic design-skill preferences for alternate layouts, fake contact details, randomized palettes, forced viewport-height sections, or static export. This Next.js application requires a dynamic contact API.
+
+Hero follow-up: transparent portrait cutout derived from the supplied photograph with the image-editing tool; original portrait remains in About. Navigation uses ordered scroll positions, mobile section focus, and breakpoint reset.

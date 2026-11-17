@@ -1232,3 +1232,83 @@ h2 {
 .project-content h3 {
   font-weight: 750;
 }
+/* Reference alignment: compact header, more deliberate card and portrait scale. */
+.header-contact {
+  display: none;
+}
+.section-block {
+  padding-block: 28px;
+}
+.hero-code {
+  pointer-events: none;
+}
+.mobile-nav a[aria-current] {
+  color: var(--primary);
+  font-weight: 700;
+}
+.desktop-nav a {
+  position: relative;
+}
+.desktop-nav a::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  background: var(--primary);
+  bottom: 9px;
+  left: 0;
+  right: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s;
+}
+.desktop-nav a:hover::after,
+.desktop-nav a[aria-current]::after {
+  transform: scaleX(1);
+}
+main > section:focus {
+  outline: none;
+}
+.project-preview {
+  height: 210px;
+}
+.hero-portrait.cutout .portrait-frame {
+  border-radius: 0;
+  height: 410px;
+  mask-image: linear-gradient(#000 80%, transparent 99%);
+}
+.hero-portrait.cutout .portrait-frame img {
+  object-fit: contain;
+  object-position: center bottom;
+}
+.hero-portrait.cutout .portrait-orbit {
+  inset: 75px 0 20px;
+  background: linear-gradient(130deg, #e5eaff 5%, #9bb3ff 65%, #d8e1ff);
+}
+@media (min-width: 960px) {
+  .header-contact {
+    display: inline-flex;
+  }
+  .hero {
+    padding-top: 24px;
+    padding-bottom: 20px;
+    grid-template-columns: 1.2fr 1fr;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 4.1vw, 53px);
+  }
+  .hero-portrait.cutout .portrait-frame {
+    height: 500px;
+  }
+  .hero-code {
+    right: 2px;
+  }
+  .portrait-note {
+    right: 8px;
+  }
+  .section-block {
+    padding-block: 30px;
+  }
+  .about-section {
+    margin-top: 26px;
+  }
+}

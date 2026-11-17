@@ -10,3 +10,5 @@
 - Publishing: GitHub authentication is inaccessible inside the isolated workspace. The new design is not live until the prepared commit is pushed and Vercel finishes deployment.
 
 The live delivery test checks the existing deployment. The redesign retains its contact handler and environment variable contract. Check https://www.ayyan.tech after deployment and verify the new portrait/cards before calling the deployment complete.
+
+Navigation follow-up: all 12 browser tests passed, including desktop/mobile anchor destinations, sticky-header clearance, active state, footer routes, top link, browser Back, and breakpoint reset. Lint and TypeScript passed. Hero cutout and updated spacing visually inspected at desktop and phone sizes.

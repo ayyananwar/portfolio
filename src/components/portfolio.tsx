@@ -40,18 +40,46 @@ function Navigation() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries)
-          if (entry.isIntersecting) setActive(entry.target.id);
-      },
-      { rootMargin: "-15% 0px -55% 0px" },
-    );
-    for (const { id } of nav) {
-      const section = document.getElementById(id);
-      if (section) observer.observe(section);
-    }
-    return () => observer.disconnect();
+    let frame = 0;
+    const update = () => {
+      const headerHeight =
+        document.querySelector(".site-header")?.getBoundingClientRect()
+          .height ?? 80;
+      const sections = nav
+        .map(({ id }) => document.getElementById(id))
+        .filter((section): section is HTMLElement => Boolean(section))
+        .sort((a, b) => a.offsetTop - b.offsetTop);
+      let current = "";
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= headerHeight + 100)
+          current = section.id;
+      }
+      if (
+        window.scrollY + window.innerHeight >=
+        document.documentElement.scrollHeight - 4
+      )
+        current = "contact";
+      setActive(current);
+      frame = 0;
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    const desktop = matchMedia("(min-width: 960px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setOpen(false);
+      schedule();
+    };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      desktop.removeEventListener("change", closeOnDesktop);
+    };
   }, []);
   useEffect(() => {
     if (!open) return;
@@ -105,7 +133,17 @@ function Navigation() {
           className="mobile-nav"
         >
           {nav.map(({ name, id }) => (
-            <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>
+            <a
+              key={id}
+              href={`#${id}`}
+              aria-current={active === id ? "location" : undefined}
+              onClick={() => {
+                setOpen(false);
+                requestAnimationFrame(() =>
+                  document.getElementById(id)?.focus({ preventScroll: true }),
+                );
+              }}
+            >
               {name}
               <ArrowUpRight size={18} />
             </a>
@@ -245,15 +283,16 @@ export function Portfolio() {
               </span>
             </div>
           </Reveal>
-          <Reveal className="hero-portrait" delay={0.1}>
+          <Reveal className="hero-portrait cutout" delay={0.1}>
             <div className="portrait-orbit" aria-hidden="true" />
             <div className="portrait-frame">
               <Image
-                src="/images/ayyan.webp"
+                src="/images/ayyan-cutout.webp"
                 alt="Ayyan Anwar"
                 width={960}
                 height={1280}
                 priority
+                loading="eager"
                 sizes="(min-width: 960px) 500px, 85vw"
               />
             </div>
@@ -282,6 +321,7 @@ export function Portfolio() {
         </section>
         <section
           id="services"
+          tabIndex={-1}
           className="section-shell section-block"
           aria-labelledby="services-heading"
         >
@@ -312,6 +352,7 @@ export function Portfolio() {
         </section>
         <section
           id="work"
+          tabIndex={-1}
           className="section-shell section-block"
           aria-labelledby="work-heading"
         >
@@ -358,6 +399,7 @@ export function Portfolio() {
         </section>
         <section
           id="about"
+          tabIndex={-1}
           className="section-shell about-section"
           aria-labelledby="about-heading"
         >
@@ -404,6 +446,7 @@ export function Portfolio() {
         </section>
         <section
           id="contact"
+          tabIndex={-1}
           className="contact-section"
           aria-labelledby="contact-heading"
         >

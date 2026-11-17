@@ -176,3 +176,77 @@ for (const width of [320, 390, 768, 1024, 1440]) {
     });
   });
 }
+for (const width of [390, 1440]) {
+  test(`all navigation destinations and active state at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    const mobile = width < 960;
+    for (const [label, id] of [
+      ["Work", "work"],
+      ["Services", "services"],
+      ["About", "about"],
+      ["Contact", "contact"],
+    ]) {
+      if (mobile)
+        await page.getByRole("button", { name: "Open navigation" }).click();
+      const navigation = page.getByRole("navigation", {
+        name: mobile ? "Mobile navigation" : "Main navigation",
+        exact: true,
+      });
+      await navigation.getByRole("link", { name: label, exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`#${id}$`));
+      await expect(page.locator(`#${id} h2`)).toBeInViewport();
+      await expect
+        .poll(() =>
+          page
+            .locator(`#${id} h2`)
+            .evaluate((el) => el.getBoundingClientRect().top),
+        )
+        .toBeGreaterThanOrEqual(76);
+      if (mobile) {
+        await expect(navigation).toBeHidden();
+        await expect(page.locator(`#${id}`)).toBeFocused();
+      } else {
+        await expect(
+          navigation.getByRole("link", { name: label, exact: true }),
+        ).toHaveAttribute("aria-current", "location");
+      }
+    }
+    await page
+      .getByRole("navigation", { name: "Footer navigation" })
+      .getByRole("link", { name: "Work", exact: true })
+      .click();
+    await expect(page.locator("#work-heading")).toBeInViewport();
+    await page.locator(".site-header .wordmark").click();
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(3);
+    await page
+      .getByRole("link", { name: "Discuss a project", exact: true })
+      .click();
+    await expect(page.locator("#contact-heading")).toBeInViewport();
+  });
+}
+
+test("mobile menu resets across desktop breakpoint and browser back restores hash", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(
+    page.getByRole("button", { name: "Open navigation" }),
+  ).toHaveAttribute("aria-expanded", "false");
+  await page.getByRole("link", { name: "View projects", exact: true }).click();
+  await page
+    .getByRole("navigation", { name: "Footer navigation" })
+    .getByRole("link", { name: "About", exact: true })
+    .click();
+  await page.goBack();
+  await expect(page).toHaveURL(/#work$/);
+  await expect(page.locator("#work-heading")).toBeInViewport();
+});
