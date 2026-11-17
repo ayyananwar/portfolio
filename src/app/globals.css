@@ -1807,3 +1807,10 @@ body {
     bottom: 60px;
   }
 }
+
+.hero-portrait.cutout .portrait-frame {
+  z-index: 1;
+}
+.portrait-ring {
+  z-index: 0;
+}
