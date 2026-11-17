@@ -15,3 +15,5 @@ The supplied portfolio image controls the visual direction. Reuse approved perso
 User reference overrides generic design-skill preferences for alternate layouts, fake contact details, randomized palettes, forced viewport-height sections, or static export. This Next.js application requires a dynamic contact API.
 
 Hero follow-up: transparent portrait cutout derived from the supplied photograph with the image-editing tool; original portrait remains in About. Navigation uses ordered scroll positions, mobile section focus, and breakpoint reset.
+
+November reference update: floating pill header; four capability cards around a higher-cropped, softly masked portrait; desktop section sidebars; tablet project rows; phone stacks; cutout About photo on a pale blue panel. Content and contact details remain verified.

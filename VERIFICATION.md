@@ -12,3 +12,7 @@
 The live delivery test checks the existing deployment. The redesign retains its contact handler and environment variable contract. Check https://www.ayyan.tech after deployment and verify the new portrait/cards before calling the deployment complete.
 
 Navigation follow-up: all 12 browser tests passed, including desktop/mobile anchor destinations, sticky-header clearance, active state, footer routes, top link, browser Back, and breakpoint reset. Lint and TypeScript passed. Hero cutout and updated spacing visually inspected at desktop and phone sizes.
+
+Latest reference layouts: 12 browser checks, lint, and TypeScript passed. Hero orbit moved below the face after visual inspection. Brevo handler unchanged.
+
+Final production build passed after the reference-layout update. Production screenshots captured at 390px and 1440px.

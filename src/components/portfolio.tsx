@@ -296,27 +296,44 @@ export function Portfolio() {
                 sizes="(min-width: 960px) 500px, 85vw"
               />
             </div>
-            <div className="hero-code" aria-hidden="true">
-              <div>
-                <i />
-                <i />
-                <i />
-              </div>
-              <span>&lt;/&gt;</span>
-              <code>
-                Build()
-                <br />
-                Automate()
-                <br />
-                Evaluate()
-              </code>
+            <div className="portrait-ring" aria-hidden="true" />
+            <div
+              className="hero-capabilities"
+              aria-label="Development capabilities"
+            >
+              {[
+                {
+                  label: "Web applications",
+                  detail: "Interfaces · Services",
+                  Icon: PanelsTopLeft,
+                  id: "web",
+                },
+                {
+                  label: "Backend",
+                  detail: "APIs · Databases",
+                  Icon: Braces,
+                  id: "backend",
+                },
+                {
+                  label: "Automation",
+                  detail: "Connected workflows",
+                  Icon: Workflow,
+                  id: "automation",
+                },
+                {
+                  label: "AI features",
+                  detail: "LLM integration",
+                  Icon: CircuitBoard,
+                  id: "ai",
+                },
+              ].map(({ label, detail, Icon, id }) => (
+                <div className={"capability capability-" + id} key={id}>
+                  <Icon size={22} />
+                  <strong>{label}</strong>
+                  <span>{detail}</span>
+                </div>
+              ))}
             </div>
-            <a className="portrait-note" href="#work">
-              Web. Backend.
-              <br />
-              Automation.
-              <ArrowUpRight size={20} />
-            </a>
           </Reveal>
         </section>
         <section
@@ -405,8 +422,8 @@ export function Portfolio() {
         >
           <Reveal className="about-photo">
             <Image
-              src="/images/ayyan.webp"
-              alt="Ayyan outdoors in a blue striped shirt"
+              src="/images/ayyan-cutout.webp"
+              alt="Ayyan Anwar in a blue striped shirt"
               width={960}
               height={1280}
               sizes="(min-width: 960px) 260px, 65vw"
