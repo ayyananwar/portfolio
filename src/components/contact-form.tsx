@@ -66,8 +66,8 @@ export function ContactForm() {
         <CheckCircle2 size={38} />
         <h3>Your enquiry is on its way.</h3>
         <p>
-          Thanks for sharing the details. A copy of your enquiry has been sent
-          to my inbox.
+          Thanks for sharing the details. Your enquiry has been accepted by the
+          email service.
         </p>
         <Button type="button" variant="outline" onClick={() => setSent(false)}>
           Send another enquiry

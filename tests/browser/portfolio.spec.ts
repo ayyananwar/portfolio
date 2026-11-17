@@ -11,16 +11,11 @@ test("desktop story, project interaction, contact validation, and accessibility"
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "I build web",
   );
-  await page.getByRole("button", { name: "Creator", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Awaiting confirmation");
-  await page.getByRole("button", { name: "Recipient", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Completed");
-  await page.getByRole("button", { name: "Reset commitment flow" }).click();
-  await expect(page.getByRole("status")).toHaveText("Try the flow");
-  await page.locator("details").first().locator("summary").click();
+  await expect(page.locator(".project-card")).toHaveCount(3);
   await expect(
-    page.getByText("Friend requests", { exact: true }),
-  ).toBeVisible();
+    page.getByRole("link", { name: "Restaurant operations, even offline." }),
+  ).toHaveAttribute("href", "https://github.com/ayyananwar/restaurant-portal");
+  await expect(page.locator(".direct-contact")).toContainText("+91 6207904901");
   await page.getByRole("button", { name: "Send enquiry" }).click();
   await expect(page.locator("#name")).toBeFocused();
   await expect(page.locator("#email-error")).toBeVisible();
@@ -141,3 +136,43 @@ test("reduced motion keeps content available", async ({ page }) => {
     ),
   ).toBe("auto");
 });
+
+for (const width of [320, 390, 768, 1024, 1440]) {
+  test(`responsive layout and loaded images at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    await expect(page.locator(".hero-portrait img")).toBeVisible();
+    await page.locator("#about").scrollIntoViewIfNeeded();
+    await expect
+      .poll(() =>
+        page
+          .locator("img")
+          .evaluateAll((images) =>
+            images.every(
+              (image) =>
+                image instanceof HTMLImageElement &&
+                image.complete &&
+                image.naturalWidth > 0,
+            ),
+          ),
+      )
+      .toBe(true);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+    await page.locator("#top").scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: `test-results/responsive-${width}.png`,
+      fullPage: true,
+      animations: "disabled",
+    });
+  });
+}

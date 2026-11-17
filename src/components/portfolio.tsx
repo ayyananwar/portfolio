@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { MotionConfig } from "motion/react";
 import {
-  ArrowDown,
+  ArrowRight,
   ArrowUpRight,
   Braces,
   CircuitBoard,
@@ -12,17 +13,16 @@ import {
   X,
   Code2,
   Link,
+  Mail,
+  Phone,
+  GraduationCap,
+  MapPin,
+  FlaskConical,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { profile, projects, services } from "@/lib/content";
+import { profile, services } from "@/lib/content";
 import { Reveal } from "@/components/motion";
-import {
-  BuildVisual,
-  PromiseVisual,
-  SimulationVisual,
-} from "@/components/project-visuals";
+import { PromiseVisual, SimulationVisual } from "@/components/project-visuals";
 import { ContactForm } from "@/components/contact-form";
-
 const nav = [
   { name: "Work", id: "work" },
   { name: "Services", id: "services" },
@@ -85,8 +85,8 @@ function Navigation() {
             </a>
           ))}
         </nav>
-        <a href={`mailto:${profile.email}`} className="header-contact">
-          Let’s talk <ArrowUpRight size={16} aria-hidden="true" />
+        <a href="#contact" className="header-contact">
+          Let&apos;s talk <ArrowUpRight size={16} aria-hidden="true" />
         </a>
         <button
           id="menu-toggle"
@@ -117,9 +117,91 @@ function Navigation() {
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <div className="section-label mono">{children}</div>;
+  return (
+    <div className="section-label mono">
+      {children}
+      <span />
+    </div>
+  );
 }
 
+const work = [
+  {
+    id: "restaurant",
+    name: "Restaurant operations, even offline.",
+    category: "Full-stack",
+    description:
+      "An in-development Windows staff app for tables, orders, and kitchen updates, with a separate hosted guest menu. Pilot validation is still pending.",
+    stack: ["TypeScript", "SQLite", "PostgreSQL"],
+    url: "https://github.com/ayyananwar/restaurant-portal",
+  },
+  {
+    id: "promise",
+    name: "Commitments with a clear finish.",
+    category: "Team project",
+    description:
+      "PROMISE brings shared commitments, timelines, and change requests together. Completion needs confirmation from both participants.",
+    stack: ["Serverpod", "PostgreSQL", "Mobile app"],
+    url: "https://github.com/nabilkhan-01/Promise",
+  },
+  {
+    id: "signal",
+    name: "Sustained contacts from noisy signals.",
+    category: "Simulation research",
+    description:
+      "MDR-SIM compares wireless sensing configurations and calibrated classifiers using held-out evaluation. Findings are limited to simulation.",
+    stack: ["Python", "Machine learning", "Evaluation"],
+    url: "https://github.com/ayyananwar/MDR-SIM",
+  },
+];
+function RestaurantVisual() {
+  return (
+    <div className="restaurant-preview">
+      <div className="restaurant-bar">
+        <span>RESTAURANT PORTAL</span>
+        <span className="preview-status">Local service</span>
+      </div>
+      <strong>Service, in sync.</strong>
+      <div className="restaurant-tabs">
+        <span>Tables</span>
+        <span>Kitchen</span>
+        <span>Menu</span>
+      </div>
+      <div className="restaurant-tables">
+        {["Table 01", "Table 02", "Table 03"].map((t, i) => (
+          <div key={t}>
+            <PanelsTopLeft size={21} />
+            <b>{t}</b>
+            <span>{["Order taken", "Preparing", "Ready to serve"][i]}</span>
+          </div>
+        ))}
+      </div>
+      <small>Workflow illustration · development build</small>
+    </div>
+  );
+}
+function SocialLinks() {
+  return (
+    <div className="about-links">
+      <a
+        className="button-outline"
+        href={profile.github}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Code2 size={17} /> GitHub <ArrowUpRight size={15} />
+      </a>
+      <a
+        className="button-outline"
+        href={profile.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Link size={17} /> LinkedIn <ArrowUpRight size={15} />
+      </a>
+    </div>
+  );
+}
 export function Portfolio() {
   return (
     <MotionConfig reducedMotion="user">
@@ -129,260 +211,226 @@ export function Portfolio() {
       <div id="top" />
       <Navigation />
       <main id="main">
-        {/* Hero structure adapted from Tailark Mist Hero One; custom editorial typography. */}
         <section className="hero section-shell" aria-labelledby="hero-heading">
-          <div className="hero-main">
-            <Reveal className="hero-copy">
-              <div className="eyebrow mono">
-                <span className="small-line" />
-                AYYAN ANWAR / SOFTWARE DEVELOPMENT
+          <Reveal className="hero-copy">
+            <SectionLabel>DEVELOPER · BUILDER</SectionLabel>
+            <h1 id="hero-heading">
+              I build web applications, backend systems, and{" "}
+              <span>workflow automations.</span>
+            </h1>
+            <p>
+              Practical software, connected services, and AI features that turn
+              ideas into working applications.
+            </p>
+            <div className="hero-actions">
+              <a className="button-primary" href="#work">
+                View projects <ArrowRight size={18} />
+              </a>
+              <a className="button-outline" href="#contact">
+                Discuss a project <ArrowUpRight size={18} />
+              </a>
+            </div>
+            <div className="skill-chips">
+              <span>
+                <Code2 size={15} /> Development
+              </span>
+              <span>
+                <Braces size={15} /> Backend
+              </span>
+              <span>
+                <CircuitBoard size={15} /> Applied AI
+              </span>
+              <span>
+                <Workflow size={15} /> Automation
+              </span>
+            </div>
+          </Reveal>
+          <Reveal className="hero-portrait" delay={0.1}>
+            <div className="portrait-orbit" aria-hidden="true" />
+            <div className="portrait-frame">
+              <Image
+                src="/images/ayyan.webp"
+                alt="Ayyan Anwar"
+                width={960}
+                height={1280}
+                priority
+                sizes="(min-width: 960px) 500px, 85vw"
+              />
+            </div>
+            <div className="hero-code" aria-hidden="true">
+              <div>
+                <i />
+                <i />
+                <i />
               </div>
-              <h1 id="hero-heading">{profile.introduction}</h1>
-              <div className="hero-actions">
-                <Button asChild className="button-primary">
-                  <a href="#work">
-                    View projects
-                    <ArrowDown size={17} />
-                  </a>
-                </Button>
-                <a href="#contact" className="text-link">
-                  Discuss a project
-                  <ArrowUpRight size={17} />
-                </a>
-              </div>
-            </Reveal>
-            <BuildVisual />
+              <span>&lt;/&gt;</span>
+              <code>
+                Build()
+                <br />
+                Automate()
+                <br />
+                Evaluate()
+              </code>
+            </div>
+            <a className="portrait-note" href="#work">
+              Web. Backend.
+              <br />
+              Automation.
+              <ArrowUpRight size={20} />
+            </a>
+          </Reveal>
+        </section>
+        <section
+          id="services"
+          className="section-shell section-block"
+          aria-labelledby="services-heading"
+        >
+          <Reveal className="section-heading">
+            <div>
+              <SectionLabel>SERVICES</SectionLabel>
+              <h2 id="services-heading">What I do</h2>
+            </div>
+            <p>
+              From the interface people use to the services and workflows behind
+              it.
+            </p>
+          </Reveal>
+          <div className="service-grid">
+            {services.map((s, i) => {
+              const Icon = serviceIcons[s.icon];
+              return (
+                <Reveal className="service-card" key={s.name} delay={i * 0.05}>
+                  <span className="icon-tile">
+                    <Icon size={27} strokeWidth={1.6} />
+                  </span>
+                  <h3>{s.name}</h3>
+                  <p>{s.description}</p>
+                </Reveal>
+              );
+            })}
           </div>
         </section>
-
         <section
           id="work"
-          className="work-section section-shell"
+          className="section-shell section-block"
           aria-labelledby="work-heading"
         >
           <Reveal className="section-heading">
-            <SectionLabel>SELECTED WORK</SectionLabel>
             <div>
-              <h2 id="work-heading">
-                Two problems.
-                <br />
-                <span className="muted-heading">Two different builds.</span>
-              </h2>
+              <SectionLabel>FEATURED WORK</SectionLabel>
+              <h2 id="work-heading">Selected projects</h2>
+            </div>
+            <p>
+              Applications and experiments across full-stack development,
+              backend systems, and applied research.
+            </p>
+          </Reveal>
+          <div className="project-grid">
+            {work.map((p, i) => (
+              <Reveal className="project-card" key={p.id} delay={i * 0.06}>
+                <div className="project-preview" inert>
+                  <span className="project-badge">{p.category}</span>
+                  {i === 0 ? (
+                    <RestaurantVisual />
+                  ) : i === 1 ? (
+                    <PromiseVisual />
+                  ) : (
+                    <SimulationVisual />
+                  )}
+                </div>
+                <div className="project-content">
+                  <h3>
+                    <a href={p.url} target="_blank" rel="noopener noreferrer">
+                      {p.name}
+                      <ArrowUpRight size={20} />
+                    </a>
+                  </h3>
+                  <p>{p.description}</p>
+                  <div className="stack-tags">
+                    {p.stack.map((t) => (
+                      <span key={t}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+        <section
+          id="about"
+          className="section-shell about-section"
+          aria-labelledby="about-heading"
+        >
+          <Reveal className="about-photo">
+            <Image
+              src="/images/ayyan.webp"
+              alt="Ayyan outdoors in a blue striped shirt"
+              width={960}
+              height={1280}
+              sizes="(min-width: 960px) 260px, 65vw"
+            />
+          </Reveal>
+          <Reveal className="about-copy">
+            <SectionLabel>ABOUT ME</SectionLabel>
+            <h2 id="about-heading">
+              Ayyan Anwar<span>.</span>
+            </h2>
+            <p>{profile.about}</p>
+            <SocialLinks />
+          </Reveal>
+          <Reveal className="about-facts">
+            <div>
+              <GraduationCap />
               <p>
-                A mobile app for shared commitments.
-                <br />A research system for noisy wireless observations.
+                <strong>Computer Science &amp; Engineering</strong>
+                <span>Final-year student at Sahyadri.</span>
+              </p>
+            </div>
+            <div>
+              <FlaskConical />
+              <p>
+                <strong>Development &amp; research</strong>
+                <span>Applications, automation, and simulation.</span>
+              </p>
+            </div>
+            <div>
+              <MapPin />
+              <p>
+                <strong>Mangaluru, India</strong>
+                <span>Studying and building software.</span>
               </p>
             </div>
           </Reveal>
-          {projects.map((project, index) => (
-            <article
-              className={`project project-${project.id}`}
-              key={project.id}
-              aria-labelledby={`${project.id}-heading`}
-            >
-              <Reveal className="project-visual-wrap">
-                {index === 0 ? <PromiseVisual /> : <SimulationVisual />}
-              </Reveal>
-              <Reveal className="project-copy" delay={0.08}>
-                <div className="project-meta mono">
-                  <span>{project.name}</span>
-                  <span>{project.category}</span>
-                </div>
-                <h3 id={`${project.id}-heading`}>{project.headline}</h3>
-                <p className="project-description">{project.description}</p>
-                <div className="project-story">
-                  <div>
-                    <span className="mono">THE PROBLEM</span>
-                    <p>{project.problem}</p>
-                  </div>
-                  <div>
-                    <span className="mono">THE APPROACH</span>
-                    <p>{project.approach}</p>
-                  </div>
-                </div>
-                <details className="feature-details">
-                  <summary>
-                    Explore the features <span aria-hidden="true">+</span>
-                  </summary>
-                  <ul>
-                    {project.features.map((feature) => (
-                      <li key={feature}>{feature}</li>
-                    ))}
-                  </ul>
-                </details>
-                {index === 1 && (
-                  <p className="research-note">
-                    Results concern the simulated environment. Real-world
-                    hospital performance and clinical effectiveness are not
-                    established.
-                  </p>
-                )}
-                <div className="stack-tags">
-                  {project.stack.map((tech) => (
-                    <span key={tech}>{tech}</span>
-                  ))}
-                </div>
-                <a
-                  className="project-repo text-link"
-                  href={project.repository}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Explore on GitHub
-                  <ArrowUpRight size={18} />
-                </a>
-              </Reveal>
-            </article>
-          ))}
         </section>
-
-        <section
-          id="services"
-          className="services-section"
-          aria-labelledby="services-heading"
-        >
-          <div className="section-shell">
-            <Reveal className="section-heading">
-              <SectionLabel>HOW I CAN HELP</SectionLabel>
-              <div>
-                <h2 id="services-heading">
-                  From an interface
-                  <br />
-                  to the systems behind it.
-                </h2>
-                <p>
-                  Work that connects what people see
-                  <br />
-                  with what a business needs to do.
-                </p>
-              </div>
-            </Reveal>
-            <div className="service-list">
-              {services.map((service) => {
-                const Icon = serviceIcons[service.icon];
-                return (
-                  <Reveal key={service.name} className="service-row">
-                    <div className="service-icon">
-                      <Icon size={25} strokeWidth={1.4} aria-hidden="true" />
-                    </div>
-                    <h3>{service.name}</h3>
-                    <p>{service.description}</p>
-                    <a
-                      href="#contact"
-                      aria-label={`Discuss ${service.name.toLowerCase()}`}
-                      className="service-link"
-                    >
-                      <ArrowUpRight size={23} />
-                    </a>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section
-          id="about"
-          className="about-section section-shell"
-          aria-labelledby="about-heading"
-        >
-          <Reveal>
-            <SectionLabel>A LITTLE BACKGROUND</SectionLabel>
-          </Reveal>
-          <div className="about-grid">
-            <Reveal>
-              <h2 id="about-heading">
-                Ayyan
-                <br />
-                Anwar<span className="end-dot">.</span>
-              </h2>
-              <div className="about-location mono">
-                <span className="location-dot" />
-                MANGALURU, INDIA
-              </div>
-            </Reveal>
-            <Reveal className="about-copy">
-              <p>{profile.about}</p>
-              <div className="about-links">
-                <a
-                  href={profile.github}
-                  className="text-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Code2 size={18} />
-                  GitHub
-                  <ArrowUpRight size={15} />
-                </a>
-                <a
-                  href={profile.linkedin}
-                  className="text-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Link size={18} />
-                  LinkedIn
-                  <ArrowUpRight size={15} />
-                </a>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* Two-column contact section adapted from Tailark Mist Contact One (MIT). */}
         <section
           id="contact"
           className="contact-section"
           aria-labelledby="contact-heading"
         >
-          <div className="section-shell">
-            <Reveal>
-              <SectionLabel>LET’S TALK</SectionLabel>
+          <div className="section-shell contact-grid">
+            <Reveal className="contact-copy">
+              <SectionLabel>GET IN TOUCH</SectionLabel>
+              <h2 id="contact-heading">
+                What are you <span>building?</span>
+              </h2>
+              <p>
+                A project, an opportunity, or a problem to solve. Tell me what
+                you have in mind.
+              </p>
+              <div className="direct-contact">
+                <a href={"mailto:" + profile.email}>
+                  <Mail size={21} />
+                  {profile.email}
+                </a>
+                <a href={profile.phoneHref}>
+                  <Phone size={21} />
+                  {profile.phone}
+                </a>
+              </div>
             </Reveal>
-            <div className="contact-grid">
-              <Reveal className="contact-copy">
-                <h2 id="contact-heading">
-                  What are
-                  <br />
-                  you building<span className="end-dot">?</span>
-                </h2>
-                <p>
-                  A client project, a job opportunity, or an idea worth
-                  discussing. Tell me a little about it.
-                </p>
-                <div className="direct-contact">
-                  <a href={`mailto:${profile.email}`}>
-                    {profile.email}
-                    <ArrowUpRight size={18} />
-                  </a>
-                  <a href={profile.phoneHref}>
-                    {profile.phone}
-                    <ArrowUpRight size={18} />
-                  </a>
-                </div>
-                <div className="contact-socials">
-                  <a
-                    href={profile.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub
-                    <ArrowUpRight size={14} />
-                  </a>
-                  <a
-                    href={profile.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    LinkedIn
-                    <ArrowUpRight size={14} />
-                  </a>
-                </div>
-              </Reveal>
-              <Reveal>
-                <ContactForm />
-              </Reveal>
-            </div>
+            <Reveal>
+              <ContactForm />
+            </Reveal>
           </div>
         </section>
       </main>
@@ -390,11 +438,14 @@ export function Portfolio() {
         <a href="#top" className="wordmark" aria-label="Back to top">
           ayyan<span>.</span>
         </a>
-        <span className="mono">WEB. BACKEND. AUTOMATION.</span>
-        <a href="#top" className="text-link">
-          Back to top
-          <ArrowUpRight size={15} />
-        </a>
+        <nav aria-label="Footer navigation">
+          {nav.map((n) => (
+            <a key={n.id} href={"#" + n.id}>
+              {n.name}
+            </a>
+          ))}
+        </nav>
+        <p>© 2026 Ayyan Anwar.</p>
       </footer>
     </MotionConfig>
   );
