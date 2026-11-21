@@ -422,10 +422,10 @@ export function Portfolio() {
         >
           <Reveal className="about-photo">
             <Image
-              src="/images/ayyan-cutout.webp"
-              alt="Ayyan Anwar in a blue striped shirt"
-              width={960}
-              height={1280}
+              src="/images/ayyan-about.jpg"
+              alt="Ayyan Anwar in front of a colorful mural"
+              width={1080}
+              height={810}
               sizes="(min-width: 960px) 260px, 65vw"
             />
           </Reveal>

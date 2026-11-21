@@ -1515,7 +1515,7 @@ body {
 .about-photo img {
   border-radius: 0;
   object-fit: cover;
-  object-position: 50% 8%;
+  object-position: 27% 50%;
   height: 270px;
 }
 .about-facts > div {
