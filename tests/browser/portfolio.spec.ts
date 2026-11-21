@@ -250,3 +250,62 @@ test("mobile menu resets across desktop breakpoint and browser back restores has
   await expect(page).toHaveURL(/#work$/);
   await expect(page.locator("#work-heading")).toBeInViewport();
 });
+test("SEO metadata and structured data are present in server HTML", async ({
+  page,
+  request,
+}) => {
+  const response = await request.get("/");
+  expect(response.status()).toBe(200);
+  const html = await response.text();
+  expect(html).toMatch(/rel="canonical" href="https:\/\/www\.ayyan\.tech\/?"/);
+  expect(html).toContain("application/ld+json");
+  expect(html).toContain("I build web applications");
+  await page.goto("/");
+  await expect(page).toHaveTitle(
+    "Ayyan Anwar | Full-stack Developer & Automation",
+  );
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    "content",
+    /Ayyan Anwar builds/,
+  );
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    "content",
+    "https://www.ayyan.tech/images/social-preview.png",
+  );
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+    "content",
+    "summary_large_image",
+  );
+  expect(await page.locator("h1").count()).toBe(1);
+  expect(await page.locator("html").getAttribute("lang")).toBe("en");
+  const data = JSON.parse(
+    (await page.locator('script[type="application/ld+json"]').textContent()) ||
+      "{}",
+  );
+  const person = data["@graph"].find(
+    (entity: Record<string, unknown>) => entity["@type"] === "Person",
+  );
+  expect(person.name).toBe("Ayyan Anwar");
+  expect(person.sameAs).toContain("https://github.com/ayyananwar");
+});
+
+test("crawler files and social preview are accessible", async ({ request }) => {
+  const xml = await request.get("/sitemap.xml");
+  expect(xml.status()).toBe(200);
+  expect(xml.headers()["content-type"]).toContain("xml");
+  const body = await xml.text();
+  expect(body.match(/<loc>/g)).toHaveLength(1);
+  expect(body).toContain("<loc>https://www.ayyan.tech/</loc>");
+  expect(body).not.toContain("#work");
+  const rules = await request.get("/robots.txt");
+  expect(rules.status()).toBe(200);
+  expect(await rules.text()).toContain(
+    "Sitemap: https://www.ayyan.tech/sitemap.xml",
+  );
+  expect(await rules.text()).toContain("Disallow: /api/");
+  const preview = await request.get("/images/social-preview.png");
+  expect(preview.status()).toBe(200);
+  expect(preview.headers()["content-type"]).toContain("image/png");
+  const icon = await request.get("/apple-icon.png");
+  expect(icon.status()).toBe(200);
+});

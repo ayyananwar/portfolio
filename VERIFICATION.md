@@ -16,3 +16,5 @@ Navigation follow-up: all 12 browser tests passed, including desktop/mobile anch
 Latest reference layouts: 12 browser checks, lint, and TypeScript passed. Hero orbit moved below the face after visual inspection. Brevo handler unchanged.
 
 Final production build passed after the reference-layout update. Production screenshots captured at 390px and 1440px.
+
+SEO update: production build, lint and TypeScript passed; 10 API/crawler-policy tests and all 14 browser checks passed. Server metadata, JSON-LD, sitemap, robots, social image, and icon routes verified. Search Console ownership, submission, live crawl/field metrics remain owner/deployment steps in SEO_CHECKLIST.md.

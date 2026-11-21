@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx --test tests/contact.test.ts",
+    "test": "tsx --test tests/contact.test.ts tests/seo.test.ts",
     "test:browser": "playwright test",
     "format": "prettier --write src tests *.json *.ts *.md .github"
   },
